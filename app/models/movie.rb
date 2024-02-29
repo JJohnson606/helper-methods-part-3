@@ -12,9 +12,16 @@
 #
 class Movie < ApplicationRecord
   validates :title, presence: true
+  validates :year, presence: true
+  validates :rated, presence: true
+  validates :released, presence: true
+  # Add more validations for other attributes as needed
+
+  serialize :ratings, Array
 
   # def to_partial_path
   #   "movies/movie"
   # end
 
 end
+

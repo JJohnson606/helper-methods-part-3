@@ -3,6 +3,7 @@ class MoviesController < ApplicationController
   before_action :foo, only: [:new, :index]
   def foo
     p "hiya" * 100
+    
   end
 
   def new
@@ -21,6 +22,27 @@ class MoviesController < ApplicationController
     end
   end
 
+  def add_movie
+    title = params[:title] # Get the movie title from params or wherever it's coming from
+    api_key = 'bb7545b3' # Replace 'your_api_key' with your actual API key
+
+    url = URI("http://www.omdbapi.com/?apikey=#{api_key}&t=#{title}")
+
+    response = Net::HTTP.get(url)
+
+    if response.present?
+      @movie = JSON.parse(response)
+      if @movie['Response'] == 'False'
+        @error_message = @movie['Error']
+      end
+    else
+      @error_message = "Failed to fetch movie data"
+    end
+  rescue => e
+    @error_message = "An error occurred: #{e.message}"
+  end
+
+
   def show
   end
 
@@ -31,7 +53,7 @@ class MoviesController < ApplicationController
 
     if @movie.valid?
       @movie.save
-
+    
       redirect_to movies_url, notice: "Movie created successfully."
     else
       render "new"

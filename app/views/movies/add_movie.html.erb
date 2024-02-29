@@ -1,0 +1,28 @@
+
+<%= form_with(url: add_movie_path, method: :get) do |f| %>
+  <div class="mb-3">
+    <%= f.label :title, "Enter Movie Title" %>
+    <%= f.text_field :title, class: "form-control", required: true %>
+  </div>
+  <%= f.submit "Search", class: "btn btn-primary" %>
+<% end %>
+
+<% if @movie.present? %>
+  <div class="card">
+    <div class="card-header">
+      <%= @movie['Title'] %> (<%= @movie['Year'] %>)
+    </div>
+    <div class="card-body">
+      <p><strong>Director:</strong> <%= @movie['Director'] %></p>
+      <p><strong>Actors:</strong> <%= @movie['Actors'] %></p>
+      <p><strong>Plot:</strong> <%= @movie['Plot'] %></p>
+      <% if @movie['Poster'].present? %>
+        <img src="<%= @movie['Poster'] %>" alt="Movie Poster" class="img-fluid">
+      <% end %>
+    </div>
+  </div>
+<% elsif @error_message.present? %>
+  <div class="alert alert-danger" role="alert">
+    <%= @error_message %>
+  </div>
+<% end %>
